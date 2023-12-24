@@ -195,6 +195,23 @@ app.put('/updateStatus/:jobId', async (req, res) => {
   }
 });
 
+// Add this route to your existing Express app
+app.get('/get-filenames-by-version/:version', async (req, res) => {
+  try {
+    const requestedVersion = req.params.version;
+    
+    if (!requestedVersion) {
+      return res.status(400).json({ error: 'Version parameter is required' });
+    }
+
+    const filenames = await Image.find({ version: requestedVersion }, 'filename');
+    res.json(filenames);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
